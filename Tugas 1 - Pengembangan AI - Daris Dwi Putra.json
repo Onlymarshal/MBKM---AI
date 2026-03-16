@@ -1,0 +1,123 @@
+{
+  "name": "Tugas 1 - Pengembangan AI - Daris Dwi Putra",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah chatbot AI yang bertugas memberikan rekomendasi makanan dan minuman dengan rasa pedas atau manis.\n\nTugasmu adalah membantu pengguna menemukan makanan atau minuman yang sesuai dengan preferensi mereka, terutama yang memiliki rasa pedas atau manis.\n\nBerikan beberapa rekomendasi yang relevan beserta penjelasan singkat mengenai makanan atau minuman tersebut. Jika memungkinkan, sertakan juga deskripsi rasa, bahan utama, atau alasan mengapa makanan tersebut cocok dengan permintaan pengguna.\n\nJika pengguna meminta rekomendasi makanan pedas, berikan contoh seperti cemilan pedas, makanan pedas populer, atau hidangan dengan sambal. Jika pengguna meminta makanan atau minuman manis, berikan contoh seperti dessert, kue, minuman manis, atau camilan manis.\n\nJawaban harus ramah, singkat, dan mudah dipahami.\n\nJika pengguna menanyakan sesuatu yang tidak berhubungan dengan makanan atau minuman pedas maupun manis, jelaskan dengan sopan bahwa chatbot ini hanya memberikan rekomendasi makanan dan minuman pedas atau manis.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e5b045fa-df40-4c93-8523-c68959375625",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        416,
+        288
+      ],
+      "id": "77920866-6dab-445f-8022-82e8a1951608",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UW3cWj60qAjaOn9h",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "chat_history"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        192
+      ],
+      "id": "eab0f5d2-0eee-4461-a2ce-76b8b84953d2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        128,
+        0
+      ],
+      "id": "a99fb89b-21a7-4380-a254-cd034f290097",
+      "name": "When chat message received",
+      "webhookId": "9bec2e53-a7ac-46b1-83fb-68b90d4adb3e"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "9eb3a75f-5e20-4cac-afc1-5397ca0c7e41",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c4db844234ed7088d85f516ff7af724af8898b188443705197ea35f16be09c52"
+  },
+  "id": "0KimPGQv6uh1iynm",
+  "tags": []
+}
