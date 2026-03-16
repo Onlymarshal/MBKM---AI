@@ -1,0 +1,166 @@
+{
+  "name": "Tugas 2 - Pembuatan AI - Daris Dwi Putra",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Marshall. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -720,
+        -144
+      ],
+      "id": "8cb70693-c2af-47e8-8b00-9088a9136d5d",
+      "name": "When chat message received",
+      "webhookId": "fdf77e9c-c784-4075-8efa-164d12df4b5d"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Anda adalah chatbot yang membantu menjawab pertanyaan pengguna mengenai produk pelatihan dan harganya. Gunakan data dari Google Sheets untuk menjawab pertanyaan pengguna. Jika pengguna menanyakan harga atau informasi produk, gunakan tool Google Sheets untuk mengambil data yang relevan.ssistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -512,
+        -144
+      ],
+      "id": "3b5165ca-1683-41a2-a71b-09fab376454a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        64
+      ],
+      "id": "d78e6d5c-2481-45db-8810-c569e096182c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        240
+      ],
+      "id": "bd53cecb-0ad5-47fa-ad35-c210a4b7272c",
+      "name": "Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UW3cWj60qAjaOn9h",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-7gWjeezHPjHgdPllmh7DpV2p92b8sB7p7IiV-L63rE",
+          "mode": "list",
+          "cachedResultName": "Produk dan Harga - darisdwiputra.",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-7gWjeezHPjHgdPllmh7DpV2p92b8sB7p7IiV-L63rE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Harga NFA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-7gWjeezHPjHgdPllmh7DpV2p92b8sB7p7IiV-L63rE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -176,
+        -32
+      ],
+      "id": "daaa25db-a011-4392-8092-705c8753c9e0",
+      "name": "Read Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SlkZfLliKpffYB1S",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1
+  },
+  "versionId": "3dcecbae-3649-467b-b68a-46833ce9e10c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c4db844234ed7088d85f516ff7af724af8898b188443705197ea35f16be09c52"
+  },
+  "id": "h3M23dYQL0L8DPFn",
+  "tags": []
+}
