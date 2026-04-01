@@ -1,0 +1,160 @@
+{
+  "name": "Tugas 4 - Pengemabangan AI WF(2)",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "71ab998f-70ab-4407-a655-798b9ea52905",
+      "name": "When chat message received",
+      "webhookId": "e23d0a27-fb63-45fa-8166-8e151bbfef3e"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Jawab pertanyaan berdasarkan dokumen yang tersedia.\nJika tidak ada informasi di dokumen, jawab nanya yang bener woi"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        80,
+        -32
+      ],
+      "id": "fefeb5fb-b942-4348-9154-d972a77121d7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        256
+      ],
+      "id": "45a53672-6468-44c8-9257-6b8ec1a1594c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UW3cWj60qAjaOn9h",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Gunakan tool ini untuk mencari informasi dari dokumen yang telah disimpan di database.",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        80
+      ],
+      "id": "31b00e4b-8cda-4719-9770-7aa4f79b96e7",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Yfn1guYwRTEjB8OY",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        384,
+        272
+      ],
+      "id": "d1b6708f-debc-4038-8013-05c01d34dca0",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UW3cWj60qAjaOn9h",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8a2a1dcb-ba03-4e1d-9953-47f93fa9ce59",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c4db844234ed7088d85f516ff7af724af8898b188443705197ea35f16be09c52"
+  },
+  "id": "7quGId8XgmZDGnc4",
+  "tags": []
+}
